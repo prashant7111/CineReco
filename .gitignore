@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+cinereco.db
+cinereco.db-shm
+cinereco.db-wal
