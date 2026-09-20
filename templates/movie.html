@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}{{m.title}} — CineReco{% endblock %}
+{% block content %}
+<section class="movie-hero">
+  <div class="bigposter"><div class="poster-fallback cinematic">{% if m.poster_file %}<img src="{{url_for('static',filename='posters/'+m.poster_file)}}" alt="{{m.title}} poster" loading="eager" fetchpriority="high" decoding="async" onerror="this.style.display='none'">{% endif %}<span class="poster-mark">CR</span><b>{{m.title}}</b><small>{{m.genres|join(' · ')}}</small></div></div>
+  <div class="movie-copy">
+    <span class="eyebrow">CINERECO FILM</span><h1>{{m.title}}</h1>
+    <div class="meta"><span>{{m.genres|join(' · ')}}</span>{% if m.rating_count %}<span>★ {{'%.1f'|format(m.rating_mean)}} <small>({{m.rating_count|int}} ratings)</small></span>{% endif %}</div>
+    {% if m.director %}<p class="director">Directed by <strong>{{m.director|join(', ')}}</strong></p>{% endif %}
+    <section class="rating-panel"><div><span class="eyebrow">YOUR RATING</span><strong>{% if user_rating %}{{'%.1f'|format(user_rating)}} / 5{% else %}Rate this film{% endif %}</strong></div><form method="post" action="{{url_for('rate_movie',mid=m.movieId)}}" class="rating-form" data-action-form>{% for n in [1,2,3,4,5] %}<button type="submit" name="rating" value="{{n}}" class="star-btn {% if user_rating and user_rating >= n %}active{% endif %}" aria-label="Rate {{n}} stars">★</button>{% endfor %}</form>{% if user_rating %}<form method="post" action="{{url_for('remove_rating',mid=m.movieId)}}" data-action-form><button class="remove-rating" type="submit">Remove rating</button></form>{% endif %}<small>Rate it, change it, or remove it anytime.</small></section>
+    <div class="actions">{% if current_user %}
+      <form method="post" action="{{url_for('favorite',mid=m.movieId)}}" data-toggle-form data-on="♥ Added to favorites" data-off="♥ Add to favorites"><button class="pill {% if is_favorite %}state-on{% endif %}" type="submit">{{'♥ Added to favorites' if is_favorite else '♥ Add to favorites'}}</button></form>
+      <form method="post" action="{{url_for('wish',mid=m.movieId)}}" data-toggle-form data-on="✓ Wishlisted" data-off="＋ Add to wishlist"><button class="ghost {% if is_wishlisted %}state-on{% endif %}" type="submit">{{'✓ Wishlisted' if is_wishlisted else '＋ Add to wishlist'}}</button></form>
+      <form method="post" action="{{url_for('watched_movie',mid=m.movieId)}}" data-toggle-form data-on="◉ Watched" data-off="◉ Mark as watched"><button class="ghost {% if is_watched %}state-on{% endif %}" type="submit">{{'◉ Watched' if is_watched else '◉ Mark as watched'}}</button></form>
+    {% else %}<a class="pill" href="{{url_for('login',next=request.path)}}">Sign in to save</a>{% endif %}</div>
+    {% if current_user and user_playlists %}<form class="add-playlist" method="post" action="{{url_for('add_playlist',mid=m.movieId)}}"><select name="playlist_id" aria-label="Choose playlist" required><option value="">Add to playlist…</option>{% for p in user_playlists %}<option value="{{p.id}}">{{p.name}}</option>{% endfor %}</select><button class="ghost" type="submit">Add</button></form>{% elif current_user %}<p class="hint">Create a playlist from Playlists to save this film into a collection.</p>{% endif %}
+    {% if m.tags %}<div class="tags">{% for t in m.tags[:12] %}<span>{{t}}</span>{% endfor %}</div>{% endif %}
+  </div>
+</section>
+
+{% if cast_people %}<section class="section cast-section"><div class="section-head"><div><span class="eyebrow">CAST & CREW</span><h2>Cast from the film.</h2><p class="section-note">Actors connected to this movie in your supplied catalogue.</p></div></div><div class="rail-wrap"><button class="rail-arrow left" type="button" data-rail-dir="left" aria-label="Scroll cast left">‹</button><div class="people-rail rail" id="cast-rail">{% for a in cast_people %}<div class="person-card"><div class="person-face"><span class="person-initial" style="display:grid">{{a.initial}}</span></div><b>{{a.name}}</b><small class="person-role">Cast member</small></div>{% endfor %}</div><button class="rail-arrow right" type="button" data-rail-dir="right" aria-label="Scroll cast right">›</button></div></section>{% endif %}
+
+<section class="section"><div class="section-head"><div><span class="eyebrow">SIMILAR TASTE</span><h2>You may also like</h2></div></div><div class="rail-wrap"><button class="rail-arrow left" type="button" data-rail-dir="left" aria-label="Scroll similar movies left">‹</button><div class="rail" id="similar-rail">{% for m in recs %}{% include '_card.html' %}{% endfor %}</div><button class="rail-arrow right" type="button" data-rail-dir="right" aria-label="Scroll similar movies right">›</button></div></section>
+{% endblock %}

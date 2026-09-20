@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}For You — CineReco{% endblock %}
+{% block content %}
+<section class="pagehead">
+  <span class="eyebrow">CINERECO INTELLIGENCE</span>
+  <h1>{% if personalized %}Picked for your taste.{% else %}A taste of your future favorites.{% endif %}</h1>
+  <p class="lead">{% if personalized %}Recommendations are shaped by the movies you've saved and rated in CineReco.{% else %}Sign in and save or rate a few films to make this space personal.{% endif %}</p>
+</section>
+{% if personalized and rating_buckets %}
+<section class="section compact-top">
+  <div class="section-head"><div><span class="eyebrow">YOUR RATING SIGNAL</span><h2>Your taste, by stars.</h2><p class="section-note">Tap a rating to see those films in your profile.</p></div><a href="{{url_for('profile')}}#rating-insights">Open insights →</a></div>
+  <div class="rating-insight-grid">
+    {% for bucket in rating_buckets %}
+      <a class="rating-insight" href="{{url_for('profile',rating=bucket.star)}}#rating-insights">
+        <div class="rating-insight-top"><strong>{{bucket.star}}★</strong><span>{{bucket.count}} rated</span></div>
+        <div class="insight-bar"><i style="width:{{ (bucket.count / (rating_total if rating_total else 1) * 100)|round(0) }}%"></i></div>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+<section class="results"><div class="section-head"><div><span class="eyebrow">RECOMMENDED</span><h2>Movies for you.</h2></div></div><div class="grid">{% for m in movies %}{% include '_card.html' %}{% else %}<div class="empty"><h2>No recommendations yet.</h2><p>Rate or save a few movies and CineReco will build your taste profile.</p></div>{% endfor %}</div></section>
+{% endblock %}

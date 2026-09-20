@@ -1,0 +1,8 @@
+<a class="card" data-prefetch="true" href="{{url_for('detail',mid=m.movieId)}}">
+  <div class="poster poster-art">
+    {% if m.poster_file %}<img src="{{url_for('static',filename='posters/'+m.poster_file)}}" alt="{{m.title}} poster" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">{% endif %}
+    <div class="poster-fallback-mini" {% if m.poster_file %}style="display:none"{% endif %}><span class="poster-mark">CR</span><b>{{m.title}}</b><small>{{m.genres[:2]|join(' · ')}}</small></div>
+    <span class="score">★ {{'%.1f'|format(m.rating_mean)}}</span>
+  </div>
+  <div class="card-info"><h3>{{m.title}}</h3><p>{{m.genres[:2]|join(' · ')}}{% if m.rating_count %} · {{m.rating_count|int}} ratings{% endif %}</p></div>
+</a>

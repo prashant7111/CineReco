@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}{{current_user}} — CineReco{% endblock %}
+{% block content %}
+<section class="pagehead profile-head">
+  <span class="eyebrow">YOUR CINERECO</span>
+  <h1>Your watch history.</h1>
+  <p class="profile-sub">Everything you saved, rated, watched and created — in one place.</p>
+  <div class="profile-stats">
+    <a href="{{url_for('favorites_page')}}"><b>{{favorites|length}}</b><span>Favorites</span></a>
+    <a href="{{url_for('wishlist_page')}}"><b>{{wishlist|length}}</b><span>Wishlist</span></a>
+    <div><b>{{watched|length}}</b><span>Watched</span></div>
+    <a href="{{url_for('profile')}}#rating-insights"><b>{{all_ratings|length}}</b><span>Ratings</span></a>
+    <a href="{{url_for('playlists')}}"><b>{{playlists|length}}</b><span>Playlists</span></a>
+  </div>
+</section>
+
+<section class="section" id="rating-insights">
+  <div class="section-head">
+    <div><span class="eyebrow">YOUR TASTE DATA</span><h2>Rating insights.</h2><p class="section-note">See exactly where the films you rated fall across your star scale.</p></div>
+  </div>
+  <div class="rating-insight-grid">
+    {% for bucket in rating_buckets %}
+      <a class="rating-insight {% if selected_rating == bucket.star %}active{% endif %}" href="{{url_for('profile',rating=bucket.star)}}#rating-insights">
+        <div class="rating-insight-top"><strong>{{bucket.star}}★</strong><span>{{bucket.count}} film{% if bucket.count != 1 %}s{% endif %}</span></div>
+        <div class="insight-bar"><i style="width:{{ (bucket.count / (all_ratings|length if all_ratings|length else 1) * 100)|round(0) }}%"></i></div>
+      </a>
+    {% endfor %}
+    {% if selected_rating %}
+      <a class="rating-insight clear" href="{{url_for('profile')}}#rating-insights">Show all ratings</a>
+    {% endif %}
+  </div>
+</section>
+
+{% if all_ratings %}
+<section class="section alt">
+  <div class="section-head"><div><span class="eyebrow">{% if selected_rating %}FILTERED RATINGS{% else %}YOUR RATINGS{% endif %}</span><h2>{% if selected_rating %}{{selected_rating|int}}-star films.{% else %}Every film you rated.{% endif %}</h2></div></div>
+  <div class="grid">
+    {% for item in ratings %}{% set m=item[0] %}{% if m %}<div class="rating-history">{% include '_card.html' %}<span class="your-score">Your rating · {{'%.1f'|format(item[1])}}★</span></div>{% endif %}{% endfor %}
+    {% if not ratings %}<div class="empty"><h2>No films in this rating.</h2><p>Choose another star level above.</p></div>{% endif %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="section-head"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>What you did.</h2></div></div>
+  <div class="activity-list">{% for a in activity %}
+    <div class="activity-item"><span class="activity-dot"></span><div>
+      <b>{{a.action|replace('_',' ')|title}}</b>
+      {% if a.movie_id %}<a href="{{url_for('detail',mid=a.movie_id)}}">Open film</a>{% endif %}
+      {% if a.details %}<small>{{a.details}}</small>{% endif %}
+    </div><time>{{a.created_at}}</time></div>
+  {% else %}<div class="empty big"><h2>No activity yet.</h2><p>Start rating, saving or watching films and CineReco will keep the history here.</p></div>{% endfor %}</div>
+</section>
+
+<section class="section">
+  <div class="section-head"><div><span class="eyebrow">WATCHED</span><h2>Films you've seen.</h2></div></div>
+  <div class="rail">{% for m in watched %}{% include '_card.html' %}{% else %}<p class="section-note">Nothing marked watched yet.</p>{% endfor %}</div>
+</section>
+{% endblock %}
