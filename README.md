@@ -1,22 +1,118 @@
-# CineReco Fresh Reset v13 — Final Polish Build
+# CineReco 🎬
 
-CineReco is a local movie discovery app built from the supplied catalogue data.
+### Discover movies. Build your collection. Share your favorites.
 
-## Launch
-Double-click **Launch CineReco.vbs** for hidden startup (no Command Prompt window).
-`Run CineReco.bat` and `Start CineReco.bat` also delegate to the hidden launcher.
+CineReco is a cinematic movie discovery platform built for people who love exploring movies.
 
-First run creates `.venv` and installs **Flask only**. Later launches reuse the environment.
+It brings movie discovery, search, ratings, favorites, watched activity, recommendations, and personal playlists together in one place — with a clean dark interface designed to feel like a real movie platform.
 
-## v13 final polish
-- Faster movie detail navigation: persisted similarity cache for the most popular poster-backed films.
-- Faster live suggestions: prefix-indexed search instead of scanning the full catalogue on every keystroke.
-- Cached popular/newest catalogue queries and long-lived browser cache headers for static assets.
-- Movie cards prefetch their detail documents on hover/focus when the browser allows it.
-- Navigation loader is now a non-blocking top progress line instead of a full-page overlay.
-- Cleaner card/button hover and active states, focus states, reduced-motion support, and content-visibility for long sections.
-- Horizontal movie/cast rails now have smart disabled arrows at the ends.
-- Hero posters use high-priority image loading.
-- Existing ratings, favorites, wishlist, watched, playlists, For You, activity tracking, filters, suggestions, and movie-detail cast showcase are preserved.
-- No external movie API or API key is required.
-- Port: 5083.
+---
+
+## ✨ What You Can Do
+
+### 🎬 Discover Movies
+Explore movies through different sections and find something to watch without endlessly searching.
+
+- Popular movies
+- Highly rated movies
+- Personalized movie suggestions
+- Random movie discovery
+- Genre-based discovery
+- Similar movies
+
+### 🔎 Search
+Find movies quickly using the built-in search experience.
+
+- Fast movie search
+- Live search suggestions
+- Search across the local movie catalogue
+
+### 🎥 Movie Details
+Open a dedicated page for each movie and explore its available information.
+
+- Movie information
+- Genres
+- Ratings
+- Similar movies
+- Cast showcase
+- Movie actions
+
+### ⭐ Rate & Favorite
+Keep track of the movies you enjoy.
+
+- Rate movies
+- Add movies to favorites
+- View your saved movies
+- Keep your movie activity organized
+
+### 👀 Watched
+Mark movies as watched and keep a record of what you've already seen.
+
+### 📋 Playlists
+Create your own movie collections.
+
+- Create playlists
+- Add movies
+- Remove movies
+- Organize movies your way
+- Share playlists using public links
+
+### 👤 Your Account
+CineReco includes user accounts so your movie activity stays connected to your profile.
+
+- Register
+- Login
+- Secure password handling
+- Favorites
+- Ratings
+- Watched movies
+- Personal playlists
+- Activity tracking
+
+---
+
+## 🎨 Designed Like a Movie Platform
+
+CineReco was built with a cinematic experience in mind rather than a basic data-dashboard interface.
+
+- Dark cinematic design
+- Custom CineReco branding
+- Smooth animations
+- Interactive movie cards
+- Responsive layout
+- Horizontal movie and cast sections
+- Search experience with live suggestions
+- Responsive buttons and interaction states
+- Mobile-friendly interface
+
+---
+
+## 🛠️ Built With
+
+**Backend**
+- Python
+- Flask
+- SQLite
+
+**Frontend**
+- HTML
+- CSS
+- JavaScript
+- Jinja2
+
+The application uses local movie data and application logic for its discovery and recommendation features.
+
+---
+
+## 🚀 Run CineReco
+
+### Requirements
+
+- Python 3.x
+- A modern web browser
+
+### Clone the project
+
+```bash
+git clone https://github.com/prashant7111/CineReco.git
+cd CineReco
